@@ -31,13 +31,18 @@ export interface Provider {
 const Dashboard: React.FC = () => {
   const [providers, setProviders] = useState<Provider[]>([]);
 
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { navigate } = useNavigation();
 
   useEffect(() => {
-    api.get('providers').then((response) => {
-      setProviders(response.data);
-    });
+    api
+      .get('providers')
+      .then((response) => {
+        setProviders(response.data);
+      })
+      .catch(() => {
+        signOut();
+      });
   }, []);
 
   const navigateToProfile = useCallback(() => {
